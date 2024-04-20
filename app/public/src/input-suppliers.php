@@ -19,8 +19,12 @@ if ($supplier_name !== '' && $supplier_country !== '' && $supplier_name !== $sup
   $stmt->bindParam(':supplier_name', $supplier_name);
   $stmt->bindParam(':supplier_country', $supplier_country);
   $stmt->execute();
-} else {
+} elseif ($supplier_name == '' || $supplier_country == '') {
   echo "<script>alert('Не оставляйте поля пустыми!')</script>";
   echo "<script>location.replace('../profile-suppliers.php')</script>";
+} elseif ($supplier_name === $supplier['supplier_name']) {
+  echo "<script>alert('Данный поставщик уже есть в базе данных')</script>";
+  echo "<script>location.replace('../profile-suppliers.php')</script>";
+} else {
+  echo "<script>location.replace('../profile-suppliers.php')</script>";
 }
-echo "<script>location.replace('../profile-suppliers.php')</script>";
