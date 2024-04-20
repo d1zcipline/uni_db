@@ -45,6 +45,17 @@ function currentUserAddress(): array|false
   return $stmt->fetch(\PDO::FETCH_ASSOC);
 }
 
+function keyboardId($keyboard_name): array|false
+{
+  $pdo = getPDO();
+
+  $query = "SELECT * FROM keyboards WHERE `keyboard_name` = :keyboard_name";
+  $stmt = $pdo->prepare($query);
+  $stmt->bindParam(':keyboard_name', $keyboard_name);
+  $stmt->execute();
+  return $stmt->fetch(mode: \PDO::FETCH_ASSOC);
+}
+
 function checkAuth(): void
 {
   if (!isset($_SESSION['customer']['id_customer'])) {
@@ -72,19 +83,4 @@ function enterProfile(): void
   if (isset($_SESSION['customer']['id_customer'])) {
     echo "<script>location.replace('profile.php')</script>";
   }
-}
-
-function uploadFile(string $file, string $prefix = ''): string
-{
-  $uploadPath = __DIR__ . '/../images';
-
-  if (!is_dir($uploadPath)) {
-    mkdir($uploadPath, 0777, true);
-  }
-
-  $ext = pathinfo($file, PATHINFO_EXTENSION);
-  $fileName = $prefix . '_' . time() . ".$ext";
-  move_uploaded_file($file, "$uploadPath/$fileName");
-
-  return "images/$fileName";
 }

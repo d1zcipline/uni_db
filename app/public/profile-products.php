@@ -96,6 +96,10 @@ $user = currentUser();
                     <input type="text" name="keyboard-name" class="personal-info-form__input--long" required>
                   </div>
                   <div class="personal-info-form__field-input">
+                    <label for="keyboard_price" class="personal-info-form__label">Цена</label>
+                    <input type="text" name="keyboard_price" class="personal-info-form__input--long" required>
+                  </div>
+                  <div class="personal-info-form__field-input">
                     <label for="keyboard-description" class="personal-info-form__label">Описание</label>
                     <textarea type="text" name="keyboard-description" class="personal-info-form__input--long" style="padding-top: 25px; height: 140px" required></textarea>
                   </div>
