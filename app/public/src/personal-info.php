@@ -2,13 +2,12 @@
 
 require_once('helpers.php');
 
-$first_name = $_POST['first_name'] ?? null;
-$last_name = $_POST['last_name'] ?? null;
-$phone = $_POST['phone'] ?? null;
-$address = $_POST['address'] ?? null;
+$first_name = $_POST['first_name'];
+$last_name = $_POST['last_name'];
+$phone = $_POST['phone'];
+$address = $_POST['address'];
 $email = $_POST['email'];
 $password = $_POST['password'];
-
 $pdo = getPDO();
 
 $userId = $_SESSION['customer']['id_customer'];
@@ -27,7 +26,7 @@ if ($email !== $user['email']) {
   echo "<script>alert('Неверный пароль');</script>";
   echo "<script>location.replace('../profile.php')</script>";
 } else {
-  if ($first_name !== $user['first_name']) {
+  if ($first_name !== $user['first_name'] && $first_name !== '') {
     $query = "UPDATE customers SET `first_name` = :first_name WHERE `email` = :email";
     $stmt = $pdo->prepare($query);
     try {
@@ -37,7 +36,7 @@ if ($email !== $user['email']) {
     }
   }
 
-  if ($last_name !== $user['last_name']) {
+  if ($last_name !== $user['last_name'] && $last_name !== '') {
     $query = "UPDATE customers SET `last_name` = :last_name WHERE `email` = :email";
     $stmt = $pdo->prepare($query);
     try {
@@ -47,7 +46,7 @@ if ($email !== $user['email']) {
     }
   }
 
-  if ($phone !== $user['phone']) {
+  if ($phone !== $user['phone'] && $phone !== '') {
     $query = "UPDATE customers SET `phone` = :phone WHERE `email` = :email";
     $stmt = $pdo->prepare($query);
     try {
@@ -57,7 +56,7 @@ if ($email !== $user['email']) {
     }
   }
 
-  if (currentUserAddress() == false) {
+  if (currentUserAddress() == false && $address !== '') {
     $foreign_key_value = $userId;
     $query = "INSERT INTO addresses (`address`, `customer_id`) VALUES (:address, :foreign_key)";
     $stmt = $pdo->prepare($query);
