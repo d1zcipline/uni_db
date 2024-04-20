@@ -13,7 +13,7 @@ $user = currentUser();
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="styles/style.css">
-  <title>Администрирование товаров</title>
+  <title>Администрирование поставщиков</title>
 </head>
 
 <body>
@@ -90,18 +90,14 @@ $user = currentUser();
           <div class="section__body">
             <div class="personal-info">
               <div class="personal-info__body">
-                <form action="src/input-keyboard.php" method="post" enctype="multipart/form-data" class="personal-info-form">
+                <form action="src/input-suppliers.php" method="post" enctype="multipart/form-data" class="personal-info-form">
                   <div class="personal-info-form__field-input">
-                    <label for="keyboard-name" class="personal-info-form__label">Название клавиатуры</label>
-                    <input type="text" name="keyboard-name" class="personal-info-form__input--long" required>
+                    <label for="supplier_name" class="personal-info-form__label">Наименование поставщика</label>
+                    <input type="text" name="supplier_name" class="personal-info-form__input--long" required>
                   </div>
                   <div class="personal-info-form__field-input">
-                    <label for="keyboard-description" class="personal-info-form__label">Описание</label>
-                    <textarea type="text" name="keyboard-description" class="personal-info-form__input--long" style="padding-top: 25px; height: 140px" required></textarea>
-                  </div>
-                  <div class="personal-info-form__field-input">
-                    <label for="image" class="personal-info-form__label">Изображение клавиатуры</label></br>
-                    <input type="file" name="image" style="width: 640px; margin-top: -25px; padding: 15px 13px; padding-top: 30px; border: 2px solid; border-color: rgba(238, 238, 238, 0.3);">
+                    <label for="supplier_country" class="personal-info-form__label">Cтрана поставщика</label>
+                    <input type="text" name="supplier_country" class="personal-info-form__input--long" required>
                   </div>
                   <button type="submit" class="personal-info-form__button button">Добавить</button>
                 </form>

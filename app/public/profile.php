@@ -82,6 +82,15 @@ if (currentUserAddress() == false) {
               }
               ?>
             </li>
+            <li class="profile-menu__item">
+              <?php
+              if (isset($_SESSION['customer']['id_customer'])) {
+                echo '<a href="profile-suppliers.php" class="profile-menu__link">Поставщики</a>';
+              } else {
+                echo '<a href="index.php" class="profile-menu__link">Поставщики</a>';
+              }
+              ?>
+            </li>
           </ul>
         </div>
       </div>
