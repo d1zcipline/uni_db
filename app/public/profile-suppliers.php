@@ -85,7 +85,29 @@ $user = currentUser();
       <div class="profile-feed">
         <section class="section container">
           <div class="section__header">
-            <h2 class="section__title">Запись данных о клавиатуре</h2>
+            <h2 class="section__title">Запись данных о поставщике</h2>
+          </div>
+          <div class="section__body">
+            <div class="personal-info">
+              <div class="personal-info__body">
+                <form action="src/input-suppliers.php" method="post" enctype="multipart/form-data" class="personal-info-form">
+                  <div class="personal-info-form__field-input">
+                    <label for="supplier_name" class="personal-info-form__label">Наименование поставщика</label>
+                    <input type="text" name="supplier_name" class="personal-info-form__input--long" required>
+                  </div>
+                  <div class="personal-info-form__field-input">
+                    <label for="supplier_country" class="personal-info-form__label">Cтрана поставщика</label>
+                    <input type="text" name="supplier_country" class="personal-info-form__input--long" required>
+                  </div>
+                  <button type="submit" class="personal-info-form__button button">Добавить</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section container">
+          <div class="section__header">
+            <h2 class="section__title">Изменения данных поставщика</h2>
           </div>
           <div class="section__body">
             <div class="personal-info">
