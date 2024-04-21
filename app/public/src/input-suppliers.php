@@ -13,12 +13,13 @@ $stmt->bindParam(':supplier_name', $supplier_name);
 $stmt->execute();
 $supplier = $stmt->fetch(mode: \PDO::FETCH_ASSOC);
 
-if ($supplier_name !== '' && $supplier_country !== '' && $supplier_name !== $supplier['supplier_name']) {
+if ($supplier_name !== '' && $supplier_country !== '' && $supplier == false) {
   $query = "INSERT INTO suppliers (`supplier_name`, `supplier_country`) VALUES (:supplier_name, :supplier_country)";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':supplier_name', $supplier_name);
   $stmt->bindParam(':supplier_country', $supplier_country);
   $stmt->execute();
+  echo "<script>location.replace('../profile-suppliers.php')</script>";
 } elseif ($supplier_name == '' || $supplier_country == '') {
   echo "<script>alert('Не оставляйте поля пустыми!')</script>";
   echo "<script>location.replace('../profile-suppliers.php')</script>";
