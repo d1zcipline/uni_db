@@ -1,5 +1,14 @@
 <?php
 require_once('src/helpers.php');
+
+$pdo = getPDO();
+
+$query = "SELECT k.id_keyboard, k.keyboard_name, k.keyboard_description, k.keyboard_image, kp.keyboard_price, kp.date_from 
+          FROM keyboards k
+          JOIN keyboards_price kp ON k.id_keyboard = kp.keyboard_id";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -32,4 +41,46 @@ require_once('src/helpers.php');
       ?>
     </div>
   </header>
+
+  <main class="content">
+    <div class="section container">
+      <div class="section__header">
+        <h2 class="section__title">Каталог товаров</h2>
+      </div>
+      <div class="section__body">
+        <div class="blog">
+          <div class="blog__body">
+            <?php foreach ($keyboards as $keyboard) { ?>
+              <form action="src/keyboard-order.php" method="POST">
+                <div class="blog-card" style="margin: 10vh 0;">
+                  <div class="blog-card__body">
+                    <div class="blog-card__image">
+                      <img src="<?php echo $keyboard['keyboard_image']; ?>" alt="<?php echo $keyboard['keyboard_name']; ?>">
+                    </div>
+                    <header class="blog-card__header">
+                      <h3 class="blog-card__title"><?php echo $keyboard['keyboard_name']; ?></h3>
+                    </header>
+                    <div class="blog-card__description" style="margin-top: -20px;">
+                      <p><?php echo $keyboard['keyboard_description']; ?></p>
+                    </div>
+                    <div class="blog-card__price">
+                      <p>Цена: <?php echo $keyboard['keyboard_price']; ?> руб.</p>
+                      <?php
+                      if (isset($_SESSION['customer']['id_customer'])) {
+                        echo '<button type="submit" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0">Купить</button>';
+                      } else {
+                        echo '<button type="" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0" disabled>Купить</button>';
+                        echo '<script>alert("Войдите в аккаунт")</script>';
+                      }
+                      ?>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            <?php } ?>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </body>

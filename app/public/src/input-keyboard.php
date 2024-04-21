@@ -61,15 +61,4 @@ if ($uploadOk == 1) {
   }
 }
 
-// $keyboard = keyboardId($keyboardName);
-
-// $foreign_key_keyboard = $keyboard['id_keyboard'];
-
-// $query = "INSERT INTO keyboards_price (`keyboard_id`, `keyboard_price`, `date_from`) VALUES (:foreign_key, :keyboard_price, :date_from)";
-// $stmt = $pdo->prepare($query);
-// $stmt->bindParam(':foreign_key', $foreign_key_keyboard);
-// $stmt->bindParam(':keyboard_price', $keyboard_price);
-// $stmt->bindParam(':date_from', $date);
-// $stmt->execute();
-
 echo "<script>location.replace('../profile-products.php')</script>";
