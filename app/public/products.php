@@ -52,6 +52,7 @@ $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="blog__body">
             <?php foreach ($keyboards as $keyboard) { ?>
               <form action="src/keyboard-order.php" method="POST">
+                <input type="hidden" name="keyboard_id" value="<?php echo $keyboard['id_keyboard']; ?>">
                 <div class="blog-card" style="margin: 10vh 0;">
                   <div class="blog-card__body">
                     <div class="blog-card__image">
@@ -65,14 +66,11 @@ $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="blog-card__price">
                       <p>Цена: <?php echo $keyboard['keyboard_price']; ?> руб.</p>
-                      <?php
-                      if (isset($_SESSION['customer']['id_customer'])) {
-                        echo '<button type="submit" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0">Купить</button>';
-                      } else {
-                        echo '<button type="" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0" disabled>Купить</button>';
-                        echo '<script>alert("Войдите в аккаунт")</script>';
-                      }
-                      ?>
+                      <div class="form__inner">
+                        <label for="quantity" class="form__label">Количество</label>
+                        <input type="number" class="form__input" id="quantity" name="quantity" min="1" style="width: 150px;" required>
+                      </div>
+                      <button type="submit" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0">Купить</button>
                     </div>
                   </div>
                 </div>

@@ -4,6 +4,32 @@ require_once('src/helpers.php');
 
 checkAuth();
 $user = currentUser();
+if (currentUserAddress() == false) {
+} else {
+  $user_address = currentUserAddress()['id_address'];
+
+  $pdo = getPDO();
+
+  $query = "SELECT orders.id_order, orders.address_id, orders.order_date, orders.order_delivery_date, orders_keyboards.keyboard_id, orders_keyboards.quantity FROM orders JOIN orders_keyboards ON orders.id_order = orders_keyboards.order_id WHERE `address_id` = :address_id";
+  $stmt = $pdo->prepare($query);
+  $stmt->bindParam(':address_id', $user_address);
+  $stmt->execute();
+  $simple_orders_keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $query = "SELECT k.id_keyboard, k.keyboard_name, k.keyboard_description, k.keyboard_image, kp.keyboard_price, kp.date_from 
+            FROM keyboards k
+            JOIN keyboards_price kp ON k.id_keyboard = kp.keyboard_id";
+  $stmt = $pdo->prepare($query);
+  $stmt->execute();
+  $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $query = "SELECT * FROM orders WHERE `address_id` = :address_id";
+  $stmt = $pdo->prepare($query);
+  $stmt->bindParam(':address_id', $user_address);
+  $stmt->execute();
+  $orders = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +111,59 @@ $user = currentUser();
             </li>
           </ul>
         </div>
+      </div>
+      <div class="profile-feed">
+        <section class="section container">
+          <div class="section__header">
+            <h2 class="section__title">Мои заказы</h2>
+          </div>
+          <div class="section__body">
+            <div class="payments-history">
+              <header class="payments-history__header">
+                <ul class="payments-history__list">
+                  <li class="payments-history__item">Дата</li>
+                  <li class="payments-history__item">Клавиатура</li>
+                  <li class="payments-history__item">Кол-во</li>
+                  <li class="payments-history__item">Стоимость</li>
+                  <li class="payments-history__item">Статус</li>
+                </ul>
+              </header>
+              <div class="payments-history__body">
+                <?php if (empty($orders)) { ?>
+                  <p>У вас пока нет заказов.</p>
+                <?php } else { ?>
+                  <?php foreach ($simple_orders_keyboards as $simple_order) { ?>
+                    <ul class="payments-history__list">
+                      <li class="payments-history__item"><?php echo $simple_order['order_date'] ?></li>
+                      <li class="payments-history__item"><?php
+                                                          $pdo = getPDO();
+                                                          $query = "SELECT keyboard_name FROM keyboards WHERE `id_keyboard` = :id_keyboard";
+                                                          $stmt = $pdo->prepare($query);
+                                                          $stmt->bindParam(':id_keyboard', $simple_order['keyboard_id']);
+                                                          $stmt->execute();
+                                                          $keyboard_name = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                          echo $keyboard_name['keyboard_name'];
+                                                          ?>
+                      </li>
+                      <li class="payments-history__item"><?php echo $simple_order['quantity'] ?></li>
+                      <li class="payments-history__item"><?php
+                                                          $pdo = getPDO();
+                                                          $query = "SELECT keyboard_price FROM keyboards_price WHERE `keyboard_id` = :keyboard_id";
+                                                          $stmt = $pdo->prepare($query);
+                                                          $stmt->bindParam(':keyboard_id', $simple_order['keyboard_id']);
+                                                          $stmt->execute();
+                                                          $keyboard_price = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                          echo $keyboard_price['keyboard_price'];
+                                                          ?> руб
+                      </li>
+                      <li class="payments-history__item">В доставке</li>
+                    </ul>
+                  <?php } ?>
+                <?php } ?>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </main>
