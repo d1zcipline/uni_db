@@ -3,6 +3,13 @@ require_once('src/functions.php');
 
 checkAuth();
 $user = currentUser();
+
+$pdo = getPDO();
+$query = "SELECT `id_supplier`, `supplier_name` FROM `suppliers`";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$suppliers_table = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -96,12 +103,24 @@ $user = currentUser();
                     <input type="text" name="keyboard-name" class="personal-info-form__input--long" required>
                   </div>
                   <div class="personal-info-form__field-input">
+                    <label for="keyboard-description" class="personal-info-form__label">Описание</label>
+                    <textarea type="text" name="keyboard-description" class="personal-info-form__input--long" style="padding-top: 25px; height: 140px" required></textarea>
+                  </div>
+                  <div class="personal-info-form__field-input">
+                    <label for="keyboard_quantity" class="personal-info-form__label">Кол-во поставляемых клавиатур</label>
+                    <input type="text" name="keyboard_quantity" class="personal-info-form__input--long" required>
+                  </div>
+                  <div class="personal-info-form__field-input">
                     <label for="keyboard_price" class="personal-info-form__label">Цена</label>
                     <input type="text" name="keyboard_price" class="personal-info-form__input--long" required>
                   </div>
                   <div class="personal-info-form__field-input">
-                    <label for="keyboard-description" class="personal-info-form__label">Описание</label>
-                    <textarea type="text" name="keyboard-description" class="personal-info-form__input--long" style="padding-top: 25px; height: 140px" required></textarea>
+                    <label for="supplier" class="personal-info-form__label">Выберите поставщика</label>
+                    <select name="supplier" id="supplier" class="personal-info-form__input--long" style="padding: 0 13px; padding-top: 16px;">
+                      <?php foreach ($suppliers_table as $suppliers) { ?>
+                        <option value="<?php echo $suppliers['supplier_name'] ?>"><?php echo $suppliers['supplier_name'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                   <div class="personal-info-form__field-input">
                     <label for="image" class="personal-info-form__label">Изображение клавиатуры</label></br>

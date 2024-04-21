@@ -9,6 +9,9 @@ $keyboard_price = $_POST["keyboard_price"];
 $keyboardDescription = $_POST["keyboard-description"];
 $image = $_FILES["image"]["name"];
 
+$keyboard_quantity = $_POST["keyboard_quantity"];
+$supplier_name = $_POST["supplier"];
+
 $date = date("Y-m-d H:i:s");
 
 $target_dir = "../images/";
@@ -51,11 +54,24 @@ if ($uploadOk == 1) {
     $stmt->bindParam(':keyboard_id', $keyboard_id, PDO::PARAM_INT);
     $stmt->bindParam(':keyboard_price', $keyboard_price);
     $stmt->bindParam(':date_from', $date);
-    if ($stmt->execute()) {
-      echo "Данные были успешно сохранены в базе данных.";
-    } else {
-      echo "Ошибка при сохранении данных в базе данных.";
+    $stmt->execute();
+
+    $query = "SELECT `id_supplier`, `supplier_name` FROM `suppliers` WHERE `supplier_name` = :supplier_name";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':supplier_name', $supplier_name);
+    $stmt->execute();
+    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($supplier !== false) {
+      $supplier_id = $supplier['id_supplier'];
     }
+
+    $query = "INSERT INTO `keyboards_suppliers` (`keyboard_id`, `supplier_id`, `keyboard_quantity`, `supplier_delivery_date`) VALUES (:keyboard_id, :supplier_id, :keyboard_quantity, :supplier_delivery_date)";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':keyboard_id', $keyboard_id);
+    $stmt->bindParam(':supplier_id', $supplier_id);
+    $stmt->bindParam(':keyboard_quantity', $keyboard_quantity);
+    $stmt->bindParam(':supplier_delivery_date', $date);
+    $stmt->execute();
   } else {
     echo "Ошибка при сохранении данных в базе данных.";
   }
