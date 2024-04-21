@@ -1,6 +1,6 @@
 <?php
 
-require_once('src/helpers.php');
+require_once('src/functions.php');
 
 checkAuth();
 $user = currentUser();
@@ -130,7 +130,7 @@ if (currentUserAddress() == false) {
               </header>
               <div class="payments-history__body">
                 <?php if (empty($orders)) { ?>
-                  <p>У вас пока нет заказов.</p>
+                  <p>У вас пока нет заказов</p>
                 <?php } else { ?>
                   <?php foreach ($simple_orders_keyboards as $simple_order) { ?>
                     <ul class="payments-history__list">
@@ -156,7 +156,7 @@ if (currentUserAddress() == false) {
                                                           echo $keyboard_price['keyboard_price'];
                                                           ?> руб
                       </li>
-                      <li class="payments-history__item">В доставке</li>
+                      <li class="payments-history__item">Собирается</li>
                     </ul>
                   <?php } ?>
                 <?php } ?>

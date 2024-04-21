@@ -1,6 +1,6 @@
 <?php
 
-require_once('src/helpers.php');
+require_once('src/functions.php');
 
 checkAuth();
 $user = currentUser();
@@ -9,8 +9,6 @@ if (currentUserAddress() == false) {
 } else {
   $userAddress = currentUserAddress()['address'];
 }
-// $first_name = $user['first_name'] !== NULL ? "echo $user['first_name']";
-// if ($user['first_name'] !== NULL) $first_name = "echo $user['first_name']";
 
 ?>
 

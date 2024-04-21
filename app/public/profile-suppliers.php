@@ -1,5 +1,5 @@
 <?php
-require_once('src/helpers.php');
+require_once('src/functions.php');
 
 checkAuth();
 $user = currentUser();

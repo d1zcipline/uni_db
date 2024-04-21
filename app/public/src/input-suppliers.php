@@ -1,6 +1,6 @@
 <?php
 
-require_once('helpers.php');
+require_once('functions.php');
 
 $supplier_name = $_POST['supplier_name'];
 $supplier_country = $_POST['supplier_country'];

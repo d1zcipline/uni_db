@@ -1,5 +1,5 @@
 <?php
-require_once('helpers.php');
+require_once('functions.php');
 
 $email = $_POST['email'];
 $password = $_POST['password'];
