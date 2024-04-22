@@ -17,12 +17,16 @@ $stmt = $pdo->prepare($query);
 $stmt->execute(['email' => $email]);
 $user = $stmt->fetch(mode: \PDO::FETCH_ASSOC);
 
-if (!password_verify($password, $user['password'])) {
-  echo "<script>alert('Неверный пароль');</script>";
-  echo "<script>location.replace('../login.html')</script>";
+if ($user !== false) {
+  if (!password_verify($password, $user['password'])) {
+    echo "<script>alert('Неверный пароль');</script>";
+    echo "<script>location.replace('../login.html')</script>";
+  }
+  $_SESSION['customer']['id_customer'] = $user['id_customer'];
+} else {
+  echo "<script>alert('Такого пользователя не существует')</script>";
 }
 
-$_SESSION['customer']['id_customer'] = $user['id_customer'];
 ?>
 
 <script>
