@@ -1,5 +1,14 @@
 <?php
 require_once('src/functions.php');
+
+$pdo = getPDO();
+
+$query = "SELECT supplier_name, supplier_country FROM `suppliers`";
+
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +19,7 @@ require_once('src/functions.php');
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="styles/style.css">
-  <title>Customizable</title>
+  <title>Поставщики</title>
 </head>
 
 <body>
@@ -39,11 +48,14 @@ require_once('src/functions.php');
   <main class="content">
     <section class="section container">
       <div class="section__header">
-        <h2 class="section__title">Главная страница</h2>
+        <h2 class="section__title">Наши поставщики</h2>
       </div>
       <div class="section__body">
-      </div>
-      </div>
+        <div class="blog">
+          <div class="blog__body">
+
+          </div>
+        </div>
     </section>
   </main>
 

@@ -4,9 +4,9 @@ require_once('functions.php');
 
 $pdo = getPDO();
 
-$keyboardName = $_POST["keyboard-name"];
+$keyboard_name = $_POST["keyboard-name"];
 $keyboard_price = $_POST["keyboard_price"];
-$keyboardDescription = $_POST["keyboard-description"];
+$keyboard_description = $_POST["keyboard-description"];
 $image = $_FILES["image"]["name"];
 
 $keyboard_quantity = $_POST["keyboard_quantity"];
@@ -43,8 +43,8 @@ if (isset($_FILES["image"]) && $_FILES["image"]["error"] == UPLOAD_ERR_OK) {
 if ($uploadOk == 1) {
   $query = "INSERT INTO keyboards (`keyboard_name`, `keyboard_description`, `keyboard_image`) VALUES (:keyboard_name, :keyboard_description, :keyboard_image)";
   $stmt = $pdo->prepare($query);
-  $stmt->bindParam(':keyboard_name', $keyboardName);
-  $stmt->bindParam(':keyboard_description', $keyboardDescription);
+  $stmt->bindParam(':keyboard_name', $keyboard_name);
+  $stmt->bindParam(':keyboard_description', $keyboard_description);
   $stmt->bindParam(':keyboard_image', $target_path);
   if ($stmt->execute()) {
     $keyboard_id = $pdo->lastInsertId();

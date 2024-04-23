@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: mysql:3306
--- Время создания: Апр 15 2024 г., 10:47
+-- Время создания: Апр 23 2024 г., 07:59
 -- Версия сервера: 8.3.0
 -- Версия PHP: 8.2.8
 
@@ -30,11 +30,15 @@ SET time_zone = "+00:00";
 CREATE TABLE `addresses` (
   `id_address` int UNSIGNED NOT NULL,
   `customer_id` int UNSIGNED NOT NULL,
-  `city_name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `postcode` varchar(255) NOT NULL,
-  `address_default` tinyint(1) NOT NULL
+  `address` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `addresses`
+--
+
+INSERT INTO `addresses` (`id_address`, `customer_id`, `address`) VALUES
+(1, 1, 'test address');
 
 -- --------------------------------------------------------
 
@@ -44,11 +48,19 @@ CREATE TABLE `addresses` (
 
 CREATE TABLE `customers` (
   `id_customer` int UNSIGNED NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `customers`
+--
+
+INSERT INTO `customers` (`id_customer`, `first_name`, `last_name`, `email`, `phone`, `password`) VALUES
+(1, 'Test Name', 'test surname', 'test@gmail.com', '7 900 000 00 00', '$2y$10$6IDMa64dbcfUh6L7oDVV7.lRZeD4sOQZ2AHTrqkIX6HKishJGUJ26');
 
 -- --------------------------------------------------------
 
@@ -59,8 +71,17 @@ CREATE TABLE `customers` (
 CREATE TABLE `keyboards` (
   `id_keyboard` int UNSIGNED NOT NULL,
   `keyboard_name` varchar(255) NOT NULL,
-  `keyboard_description` text NOT NULL
+  `keyboard_description` text NOT NULL,
+  `keyboard_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `keyboards`
+--
+
+INSERT INTO `keyboards` (`id_keyboard`, `keyboard_name`, `keyboard_description`, `keyboard_image`) VALUES
+(1, 'Zuoya GMK67', 'The best budget keyboard', 'images/keyboard-image-1713858487.jpg'),
+(2, 'Monsgeek M1', 'TEST DESC', 'images/keyboard-image-1713859125.jpg');
 
 -- --------------------------------------------------------
 
@@ -71,9 +92,17 @@ CREATE TABLE `keyboards` (
 CREATE TABLE `keyboards_price` (
   `id` int UNSIGNED NOT NULL,
   `keyboard_id` int UNSIGNED NOT NULL,
-  `keyboard_price` double(8,2) NOT NULL,
+  `keyboard_price` int NOT NULL,
   `date_from` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `keyboards_price`
+--
+
+INSERT INTO `keyboards_price` (`id`, `keyboard_id`, `keyboard_price`, `date_from`) VALUES
+(1, 1, 6990, '2024-04-23'),
+(2, 2, 9900, '2024-04-23');
 
 -- --------------------------------------------------------
 
@@ -89,6 +118,14 @@ CREATE TABLE `keyboards_suppliers` (
   `supplier_delivery_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Дамп данных таблицы `keyboards_suppliers`
+--
+
+INSERT INTO `keyboards_suppliers` (`id`, `keyboard_id`, `supplier_id`, `keyboard_quantity`, `supplier_delivery_date`) VALUES
+(1, 1, 1, 50, '2024-04-23'),
+(2, 2, 1, 30, '2024-04-23');
+
 -- --------------------------------------------------------
 
 --
@@ -99,8 +136,15 @@ CREATE TABLE `orders` (
   `id_order` int UNSIGNED NOT NULL,
   `address_id` int UNSIGNED NOT NULL,
   `order_date` date NOT NULL,
-  `order_delivery_date` date NOT NULL
+  `order_delivery_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id_order`, `address_id`, `order_date`, `order_delivery_date`) VALUES
+(1, 1, '2024-04-23', NULL);
 
 -- --------------------------------------------------------
 
@@ -115,6 +159,13 @@ CREATE TABLE `orders_keyboards` (
   `quantity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Дамп данных таблицы `orders_keyboards`
+--
+
+INSERT INTO `orders_keyboards` (`id`, `order_id`, `keyboard_id`, `quantity`) VALUES
+(1, 1, 1, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -123,8 +174,16 @@ CREATE TABLE `orders_keyboards` (
 
 CREATE TABLE `suppliers` (
   `id_supplier` int UNSIGNED NOT NULL,
-  `supplier_name` varchar(255) NOT NULL
+  `supplier_name` varchar(255) NOT NULL,
+  `supplier_country` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `suppliers`
+--
+
+INSERT INTO `suppliers` (`id_supplier`, `supplier_name`, `supplier_country`) VALUES
+(1, 'Direct Factory', 'China');
 
 --
 -- Индексы сохранённых таблиц
@@ -192,49 +251,49 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT для таблицы `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id_address` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_address` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id_customer` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_customer` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `keyboards`
 --
 ALTER TABLE `keyboards`
-  MODIFY `id_keyboard` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_keyboard` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `keyboards_price`
 --
 ALTER TABLE `keyboards_price`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `keyboards_suppliers`
 --
 ALTER TABLE `keyboards_suppliers`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id_order` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_order` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `orders_keyboards`
 --
 ALTER TABLE `orders_keyboards`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id_supplier` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_supplier` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

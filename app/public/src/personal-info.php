@@ -15,10 +15,6 @@ $userId = $_SESSION['customer']['id_customer'];
 $user = currentUser();
 $userAddress = currentUserAddress();
 
-// $stmt = $pdo->prepare("SELECT * FROM customers WHERE id_customer = :id_customer");
-// $stmt->execute(['id_customer' => $userId]);
-// $user = $stmt->fetch(mode: \PDO::FETCH_ASSOC);
-
 if ($email !== $user['email']) {
   echo "<script>alert('Неправильная почта');</script>";
   echo "<script>location.replace('../profile.php')</script>";
