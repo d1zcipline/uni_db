@@ -127,7 +127,7 @@ $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <label for="quantity" class="form__label">Количество</label>
                         <input type="number" class="form__input" id="quantity" name="quantity" min="1" style="width: 150px;" required>
                       </div>
-                      <button type="submit" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0">Купить</button>
+                      <button type="submit" class="button" style="padding: 10px 15px; border: 0px solid; border-radius: 0">Добавить в корзину</button>
                     </div>
                   </div>
                 </div>
