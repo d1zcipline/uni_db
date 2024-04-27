@@ -28,6 +28,9 @@ $user = currentUser();
           <li class="header__menu-item">
             <a href="suppliers.php" class="header__menu-link">Поставщики</a>
           </li>
+          <li class="header__menu-item">
+            <a href="cart.php" class="header__menu-link">Корзина</a>
+          </li>
         </ul>
       </nav>
       <?php

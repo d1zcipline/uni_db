@@ -1252,6 +1252,17 @@ h2 {
   background-color: var(--color-text);
   opacity: 0.3;
 }
+.payments-history-2__header {
+  height: 25px;
+}
+.payments-history-2__header::after {
+  content: "";
+  position: absolute;
+  width: 1080px;
+  height: 1px;
+  background-color: var(--color-text);
+  opacity: 0.3;
+}
 .payments-history__list {
   display: flex;
   flex-direction: row;
