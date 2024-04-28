@@ -108,6 +108,11 @@ $carts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php } ?>
           </div>
         </div>
+        <?php if (!empty($carts)) { ?>
+          <form action="src/order.php" style="margin: 20px 0px">
+            <button class="button" style="border: 0px solid">Оформить заказ</button>
+          </form>
+        <?php } ?>
       </div>
     </section>
   </main>

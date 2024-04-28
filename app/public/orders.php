@@ -10,7 +10,7 @@ if (currentUserAddress() == false) {
 
   $pdo = getPDO();
 
-  $query = "SELECT orders.id_order, orders.address_id, orders.order_date, orders.order_delivery_date, orders_keyboards.keyboard_id, orders_keyboards.quantity FROM orders JOIN orders_keyboards ON orders.id_order = orders_keyboards.order_id WHERE `address_id` = :address_id";
+  $query = "SELECT address_id, order_date FROM orders WHERE `address_id` = :address_id";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':address_id', $user_address);
   $stmt->execute();
