@@ -10,24 +10,18 @@ if (currentUserAddress() == false) {
 
   $pdo = getPDO();
 
-  $query = "SELECT address_id, order_date FROM orders WHERE `address_id` = :address_id";
-  $stmt = $pdo->prepare($query);
-  $stmt->bindParam(':address_id', $user_address);
-  $stmt->execute();
-  $simple_orders_keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  $query = "SELECT k.id_keyboard, k.keyboard_name, k.keyboard_description, k.keyboard_image, kp.keyboard_price, kp.date_from 
-            FROM keyboards k
-            JOIN keyboards_price kp ON k.id_keyboard = kp.keyboard_id";
-  $stmt = $pdo->prepare($query);
-  $stmt->execute();
-  $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
   $query = "SELECT * FROM orders WHERE `address_id` = :address_id";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':address_id', $user_address);
   $stmt->execute();
-  $orders = $stmt->fetch(PDO::FETCH_ASSOC);
+  $orders_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $query = "SELECT ok.keyboard_id, ok.quantity, kp.keyboard_price, kp.date_from 
+            FROM orders_keyboards ok
+            JOIN keyboards_price kp ON ok.keyboard_id = kp.keyboard_id";
+  $stmt = $pdo->prepare($query);
+  $stmt->execute();
+  $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
@@ -125,41 +119,38 @@ if (currentUserAddress() == false) {
               <header class="payments-history__header">
                 <ul class="payments-history__list">
                   <li class="payments-history__item">Дата</li>
-                  <li class="payments-history__item">Клавиатура</li>
-                  <li class="payments-history__item">Кол-во</li>
-                  <li class="payments-history__item">Стоимость</li>
+                  <li class="payments-history__item">Номер заказа</li>
+                  <li class="payments-history__item">Общая стоимость</li>
                   <li class="payments-history__item">Статус</li>
                 </ul>
               </header>
               <div class="payments-history__body">
-                <?php if (empty($orders)) { ?>
+                <?php if (empty($orders_list)) { ?>
                   <p>У вас пока нет заказов</p>
                 <?php } else { ?>
-                  <?php foreach ($simple_orders_keyboards as $simple_order) { ?>
+                  <?php foreach ($orders_list as $order) { ?>
                     <ul class="payments-history__list">
-                      <li class="payments-history__item"><?php echo $simple_order['order_date'] ?></li>
-                      <li class="payments-history__item"><?php
-                                                          $pdo = getPDO();
-                                                          $query = "SELECT keyboard_name FROM keyboards WHERE `id_keyboard` = :id_keyboard";
-                                                          $stmt = $pdo->prepare($query);
-                                                          $stmt->bindParam(':id_keyboard', $simple_order['keyboard_id']);
-                                                          $stmt->execute();
-                                                          $keyboard_name = $stmt->fetch(PDO::FETCH_ASSOC);
-                                                          echo $keyboard_name['keyboard_name'];
-                                                          ?>
+                      <li class="payments-history__item"><?php echo $order['order_date'] ?></li>
+                      <li class="payments-history__item"><?php echo $order['id'] ?></li>
+                      <li class="payments-history__item">
+                        <?php
+                        $query = "SELECT ok.keyboard_id, ok.order_id, ok.quantity, kp.keyboard_price
+                        FROM orders_keyboards ok
+                        JOIN keyboards_price kp ON ok.keyboard_id = kp.keyboard_id AND ok.order_id = :order_id";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->bindParam(':order_id', $order['id']);
+                        $stmt->execute();
+                        $keyboards = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $total_amount = 0;
+
+                        foreach ($keyboards as $keyboard) {
+                          $keyboard_quantity = intval($keyboard['quantity']);
+                          $total_amount += $keyboard_quantity * $keyboard['keyboard_price'];
+                        }
+                        echo $total_amount;
+                        ?> руб
                       </li>
-                      <li class="payments-history__item"><?php echo $simple_order['quantity'] ?></li>
-                      <li class="payments-history__item"><?php
-                                                          $pdo = getPDO();
-                                                          $query = "SELECT keyboard_price FROM keyboards_price WHERE `keyboard_id` = :keyboard_id";
-                                                          $stmt = $pdo->prepare($query);
-                                                          $stmt->bindParam(':keyboard_id', $simple_order['keyboard_id']);
-                                                          $stmt->execute();
-                                                          $keyboard_price = $stmt->fetch(PDO::FETCH_ASSOC);
-                                                          echo $keyboard_price['keyboard_price'];
-                                                          ?> руб
-                      </li>
-                      <li class="payments-history__item">Собирается</li>
+                      <li class="payments-history__item"><?php echo $order['status'] ?></li>
                     </ul>
                   <?php } ?>
                 <?php } ?>

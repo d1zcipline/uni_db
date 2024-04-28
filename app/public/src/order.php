@@ -4,6 +4,8 @@ require_once('functions.php');
 
 $pdo = getPDO();
 
+$status = 'Собирается';
+
 $query = "SELECT * FROM cart WHERE customer_id = :customer_id";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':customer_id', $_SESSION['customer']['id_customer']);
@@ -17,10 +19,11 @@ if (currentUserAddress() == false) {
   $user_address = currentUserAddress()['id_address'];
   $date = date("Y-m-d H:i:s");
 
-  $query = "INSERT INTO orders (`address_id`, `order_date`) VALUES (:address_id, :order_date)";
+  $query = "INSERT INTO orders (`address_id`, `order_date`, `status`) VALUES (:address_id, :order_date, :status)";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':address_id', $user_address);
   $stmt->bindParam(':order_date', $date);
+  $stmt->bindParam(':status', $status);
   if ($stmt->execute()) {
     $order_id = $pdo->lastInsertId();
     foreach ($carts as $cart) {
